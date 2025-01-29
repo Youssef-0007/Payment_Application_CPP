@@ -1,0 +1,55 @@
+classDiagram
+    class Card {
+        -string holderName
+        -string expiryDate
+        -string PAN
+        +getCardHolderName() bool
+        +getCardExpiryDate() bool
+        +getCardPAN() bool
+    }
+
+    class Terminal {
+        -double maxAmount
+        -string transactionDate
+        -double transactionAmount
+        +getTransactionDate() bool
+        +isCardExpired(Card) bool
+        +getTransactionAmount() bool
+        +isBelowMaxAmount() bool
+        +setMaxAmount(double) void
+    }
+
+    class Transaction {
+        +Card cardData
+        +Terminal terminalData
+        +TransactionState state
+        +double amount
+        +string transactionSequenceNumber
+    }
+
+    class Server {
+        -vector~Account~ accounts
+        -vector~Transaction~ transactions
+        +receiveTransactionData(Transaction&) EN_transStat_t
+        -isValidAccount(Card) bool
+        -isAmountAvailable(double) bool
+        -saveTransaction(Transaction) bool
+    }
+
+    class Account {
+        -string primaryAccountNumber
+        -string holderName
+        -double balance
+        -AccountState state
+    }
+
+    class Application {
+        +appStart() void
+    }
+
+    Transaction --* Server
+    Card --* Transaction
+    Terminal --* Transaction
+    Application --> Server
+    Application --> Terminal
+    Application --> Card
